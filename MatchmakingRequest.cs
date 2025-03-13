@@ -38,6 +38,32 @@ namespace OwlTree.Matchmaking
     }
 
     /// <summary>
+    /// How the simulation buffer will be handled in the session.
+    /// </summary>
+    public enum SimulationBufferControl
+    {
+        /// <summary>
+        /// No simulation buffer will be maintained. This means the session will not maintain a synchronized simulation tick number.
+        /// Alignment is not considered. Best for games with irregular tick timings like turn-based games.
+        /// </summary>
+        None,
+        /// <summary>
+        /// Wait for all clients to deliver their input before executing the next tick. Simulation buffer is only maintained for ticks
+        /// that haven't been run yet.
+        /// </summary>
+        Lockstep,
+        /// <summary>
+        /// Maintain a simulation buffer of received future ticks, and past ticks. When receiving updates from a previous tick,
+        /// re-simulate from the new information back to the current tick.
+        /// </summary>
+        Rollback,
+        /// <summary>
+        /// Maintain a simulation buffer of received future ticks.
+        /// </summary>
+        Snapshot
+    }
+
+    /// <summary>
     /// Sent by clients to a matchmaking endpoint.
     /// </summary>
     public struct MatchmakingRequest
@@ -84,6 +110,15 @@ namespace OwlTree.Matchmaking
         /// The minimum version of your app the session will allow.
         /// </summary>
         public ushort minAppVersion { get; set; }
+        /// <summary>
+        /// Decide how simulation latency and synchronization is handled.
+        /// </summary>
+        public SimulationBufferControl simulationControl { get; set; }
+        /// <summary>
+        /// Assumed simulation tick speed in milliseconds. Used to accurately allocate sufficient simulation buffer space.
+        /// <c>ExecuteQueue()</c> should called at this rate.
+        /// </summary>
+        public int simulationTickRate { get; set; }
         /// <summary>
         /// App specific arguments.
         /// </summary>

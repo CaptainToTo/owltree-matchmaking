@@ -86,6 +86,16 @@ namespace OwlTree.Matchmaking
         public ServerType serverType { get; set; }
 
         /// <summary>
+        /// Decide how simulation latency and synchronization is handled.
+        /// </summary>
+        public SimulationBufferControl simulationControl { get; set; }
+        /// <summary>
+        /// Assumed simulation tick speed in milliseconds. Used to accurately allocate sufficient simulation buffer space.
+        /// <c>ExecuteQueue()</c> should called at this rate.
+        /// </summary>
+        public int simulationTickRate { get; set; }
+
+        /// <summary>
         /// Serializes the response to a JSON string.
         /// </summary>
         public string Serialize()
