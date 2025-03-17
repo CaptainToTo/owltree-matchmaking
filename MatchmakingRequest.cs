@@ -40,7 +40,7 @@ namespace OwlTree.Matchmaking
     /// <summary>
     /// How the simulation buffer will be handled in the session.
     /// </summary>
-    public enum SimulationBufferControl
+    public enum SimulationSystemRequest
     {
         /// <summary>
         /// No simulation buffer will be maintained. This means the session will not maintain a synchronized simulation tick number.
@@ -113,7 +113,7 @@ namespace OwlTree.Matchmaking
         /// <summary>
         /// Decide how simulation latency and synchronization is handled.
         /// </summary>
-        public SimulationBufferControl simulationControl { get; set; }
+        public SimulationSystemRequest simulationSystem { get; set; }
         /// <summary>
         /// Assumed simulation tick speed in milliseconds. Used to accurately allocate sufficient simulation buffer space.
         /// <c>ExecuteQueue()</c> should called at this rate.
