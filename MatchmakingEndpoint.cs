@@ -61,19 +61,23 @@ namespace OwlTree.Matchmaking
                 var context = await _listener.GetContextAsync();
                 var request = context.Request;
                 var response = context.Response;
-                var source = IPAddress.Parse(request.Headers["X-Real-IP"] ?? request.UserHostAddress);
 
                 if (request.Url?.AbsolutePath == "/matchmaking")
                 {
                     try
                     {
+                        var source = request.Headers["X-Real-IP"] != null ? IPAddress.Parse(request.Headers["X-Real-IP"]) : request.RemoteEndPoint.Address;
+
                         string requestBody = new StreamReader(request.InputStream, Encoding.UTF8).ReadToEnd();
                         var requestObj = MatchmakingRequest.Deserialize(requestBody);
+
                         var responseObj = _callback.Invoke(source, requestObj);
                         string responseBody = responseObj.Serialize();
+
                         response.StatusCode = (int)responseObj.responseCode;
                         byte[] buffer = Encoding.UTF8.GetBytes(responseBody);
                         response.ContentLength64 = buffer.Length;
+
                         response.OutputStream.Write(buffer, 0, buffer.Length);
                     }
                     catch
