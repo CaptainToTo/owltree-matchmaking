@@ -88,7 +88,7 @@ namespace OwlTree.Matchmaking
         /// <summary>
         /// Decide how simulation latency and synchronization is handled.
         /// </summary>
-        public SimulationBufferControl simulationControl { get; set; }
+        public SimulationSystemRequest simulationControl { get; set; }
         /// <summary>
         /// Assumed simulation tick speed in milliseconds. Used to accurately allocate sufficient simulation buffer space.
         /// <c>ExecuteQueue()</c> should called at this rate.
